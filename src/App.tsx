@@ -14,17 +14,20 @@ export const App = () => {
   });
 
   return (
-    <div class="flex-col items-center pt-8 min-h-screen">
-      <canvas class="mx-auto" width={400} height={300} ref={canvasRef}></canvas>
-      <h1 class="text-center">Puppy</h1>
-      <button
-        id="happy-btn"
-        class={`bg-slate-300 hover:bg-slate-400 active:bg-slate-500 active:text-white
-          border rounded-lg px-4 py-2 mt-4 block mx-auto`}
-        onClick={() => queueAction("happy")}
-      >
-        "Good puppy!"
-      </button>
+    <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
+      <h1 class="text-7xl font-semibold italic text-center">Puppy</h1>
+      <div class="flex flex-col">
+        <canvas width={400} height={300} ref={canvasRef}></canvas>
+        <button
+          class={`bg-slate-300
+          hover:bg-slate-400 hover:text-white
+          active:bg-slate-500 active:text-white
+          border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
+          onClick={() => queueAction("happy")}
+        >
+          "Good puppy!"
+        </button>
+      </div>
     </div>
   );
 };
