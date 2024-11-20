@@ -4,6 +4,9 @@ import { actions } from "./utils/actions";
 
 export const App = () => {
   let canvasRef: HTMLCanvasElement | undefined;
+  const bgMusic = new Audio("/level-7-27947.mp3");
+  bgMusic.loop = true;
+  bgMusic.play();
 
   onMount(() => {
     if (!canvasRef) return;
