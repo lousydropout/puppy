@@ -43,9 +43,9 @@ export const App = () => {
           <canvas width={400} height={300} ref={canvasRef}></canvas>
           <button
             class={`bg-slate-300
-          hover:bg-slate-400 hover:text-white
-          active:bg-slate-500 active:text-white
-          border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
+                    hover:bg-slate-400 hover:text-white
+                    active:bg-slate-500 active:text-white
+                    border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
             onClick={() => queueAction("happy")}
           >
             "Good puppy!"
