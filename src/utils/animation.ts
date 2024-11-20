@@ -1,10 +1,4 @@
-import {
-  ActionName,
-  actions,
-  audioContext,
-  pendingQueue,
-  type Action,
-} from "./actions";
+import { audioContext, pendingQueue, type Action } from "./actions";
 
 const offset = 80;
 const CANVAS_WIDTH = 400;
@@ -45,6 +39,7 @@ const drawFrame = (
 export const animate = (
   ctx: CanvasRenderingContext2D,
   action: Action,
+  defaultAction: Action,
   timestamp: number = performance.now()
 ) => {
   const frameInterval = 1000 / action.rate; // Time (ms) per frame based on rate
@@ -64,21 +59,22 @@ export const animate = (
 
   if (gameFrame < action.frames) {
     // Continue animation
-    requestAnimationFrame((newTimestamp) => animate(ctx, action, newTimestamp));
+    requestAnimationFrame((newTimestamp) =>
+      animate(ctx, action, defaultAction, newTimestamp)
+    );
   } else {
     // Animation complete -> reset and queue the next action
     gameFrame = 0;
     startTime = null; // Reset start time for the next animation
 
-    const nextAction: Action = pendingQueue.shift() || actions.normal;
+    const nextAction: Action = pendingQueue.shift() || defaultAction;
     if (nextAction.audio) playAudio(nextAction.audio);
     requestAnimationFrame((newTimestamp) =>
-      animate(ctx, nextAction, newTimestamp)
+      animate(ctx, nextAction, defaultAction, newTimestamp)
     );
   }
 };
 
-export const queueAction = (action: ActionName) => {
-  const queuedAction = actions[action];
-  if (pendingQueue.length < 1) pendingQueue.push(queuedAction);
+export const queueAction = (action: Action) => {
+  if (pendingQueue.length < 1) pendingQueue.push(action);
 };

@@ -1,22 +1,25 @@
 import { createEffect, createSignal, onMount, Show } from "solid-js";
 import { animate, queueAction } from "./utils/animation";
-import { actions } from "./utils/actions";
+import { Action, ActionName, getActions } from "./utils/actions";
 import { Sound } from "./icons/Sound";
 import { Muted } from "./icons/Muted";
 
 export const App = () => {
   const [muted, setMuted] = createSignal(true);
+  let actions: Record<ActionName, Action> | undefined;
 
   let canvasRef: HTMLCanvasElement | undefined;
   const bgMusic = new Audio("/level-7-27947.mp3");
   bgMusic.loop = true;
 
-  onMount(() => {
+  onMount(async () => {
     if (!canvasRef) return;
     const ctx = canvasRef.getContext("2d");
     if (!ctx) return;
     ctx.globalAlpha = 1;
-    animate(ctx, actions.normal);
+
+    actions = await getActions();
+    animate(ctx, actions.normal, actions.normal);
   });
 
   createEffect(() => {
@@ -46,7 +49,9 @@ export const App = () => {
                     hover:bg-slate-400 hover:text-white
                     active:bg-slate-500 active:text-white
                     border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
-            onClick={() => queueAction("happy")}
+            onClick={() => {
+              if (actions) queueAction(actions.happy);
+            }}
           >
             "Good puppy!"
           </button>

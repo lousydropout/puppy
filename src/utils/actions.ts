@@ -14,7 +14,7 @@ const loadAudioBuffer = async (url: string): Promise<AudioBuffer> => {
   return audioContext.decodeAudioData(arrayBuffer);
 };
 
-const getActions = async (): Promise<Record<ActionName, Action>> => {
+export const getActions = async (): Promise<Record<ActionName, Action>> => {
   const normal = new Image();
   normal.src = "/normal.webp";
 
@@ -28,5 +28,4 @@ const getActions = async (): Promise<Record<ActionName, Action>> => {
   };
 };
 
-export const actions = await getActions();
 export const pendingQueue: Action[] = [];
