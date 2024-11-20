@@ -15,8 +15,8 @@ const getActions = (): Record<ActionName, Action> => {
   const happyYelp = new Audio("/yelp.aac");
 
   return {
-    normal: { img: normal, frames: 6, audio: null, rate: 1.8 },
-    happy: { img: happy, frames: 12, audio: happyYelp, rate: 1 },
+    normal: { img: normal, frames: 6, audio: null, rate: 6 },
+    happy: { img: happy, frames: 12, audio: happyYelp, rate: 12 },
   };
 };
 
