@@ -6,7 +6,6 @@ export const App = () => {
   let canvasRef: HTMLCanvasElement | undefined;
   const bgMusic = new Audio("/level-7-27947.mp3");
   bgMusic.loop = true;
-  bgMusic.play();
 
   onMount(() => {
     if (!canvasRef) return;
@@ -14,6 +13,8 @@ export const App = () => {
     if (!ctx) return;
     ctx.globalAlpha = 1;
     animate(ctx, actions.normal);
+
+    bgMusic.play();
   });
 
   return (
@@ -26,9 +27,7 @@ export const App = () => {
           hover:bg-slate-400 hover:text-white
           active:bg-slate-500 active:text-white
           border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
-          onClick={() => {
-            queueAction("happy");
-          }}
+          onClick={() => queueAction("happy")}
         >
           "Good puppy!"
         </button>
