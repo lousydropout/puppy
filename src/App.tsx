@@ -23,7 +23,9 @@ export const App = () => {
           hover:bg-slate-400 hover:text-white
           active:bg-slate-500 active:text-white
           border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
-          onClick={() => queueAction("happy")}
+          onClick={() => {
+            queueAction("happy");
+          }}
         >
           "Good puppy!"
         </button>

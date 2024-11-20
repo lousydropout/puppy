@@ -30,7 +30,7 @@ const drawFrame = (
 };
 
 export const animate = (ctx: CanvasRenderingContext2D, action: Action) => {
-  const effectiveStaggerFrames = Math.round(10 * action.rate);
+  const effectiveStaggerFrames = Math.round(30 * action.rate);
 
   if (k % effectiveStaggerFrames === 0) {
     drawFrame(ctx, gameFrame % action.frames, action.img);
@@ -45,10 +45,15 @@ export const animate = (ctx: CanvasRenderingContext2D, action: Action) => {
     k = 0;
 
     const nextAction: Action = pendingQueue.shift() || actions.normal;
+    if (nextAction.audio) {
+      nextAction.audio.pause();
+      nextAction.audio.currentTime = 0;
+      nextAction.audio.play();
+    }
     requestAnimationFrame(() => animate(ctx, nextAction));
   }
 };
 
 export const queueAction = (action: ActionName) => {
-  if (pendingQueue.length < 5) pendingQueue.push(actions[action]);
+  if (pendingQueue.length < 3) pendingQueue.push(actions[action]);
 };
