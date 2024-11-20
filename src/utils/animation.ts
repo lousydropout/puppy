@@ -1,4 +1,10 @@
-import { ActionName, actions, pendingQueue, type Action } from "./actions";
+import {
+  ActionName,
+  actions,
+  audioContext,
+  pendingQueue,
+  type Action,
+} from "./actions";
 
 const offset = 80;
 const CANVAS_WIDTH = 400;
@@ -8,6 +14,13 @@ const SPRITE_WIDTH = 688;
 const SPRITE_HEIGHT = 432;
 let gameFrame = 0;
 let startTime: number | null = null; // Tracks the start time of the animation
+
+const playAudio = (buffer: AudioBuffer) => {
+  const source = audioContext.createBufferSource();
+  source.buffer = buffer;
+  source.connect(audioContext.destination);
+  source.start(0); // Start immediately
+};
 
 const drawFrame = (
   ctx: CanvasRenderingContext2D,
@@ -58,11 +71,7 @@ export const animate = (
     startTime = null; // Reset start time for the next animation
 
     const nextAction: Action = pendingQueue.shift() || actions.normal;
-    if (nextAction.audio) {
-      nextAction.audio.pause();
-      nextAction.audio.currentTime = 0;
-      nextAction.audio.play();
-    }
+    if (nextAction.audio) playAudio(nextAction.audio);
     requestAnimationFrame((newTimestamp) =>
       animate(ctx, nextAction, newTimestamp)
     );
@@ -71,11 +80,5 @@ export const animate = (
 
 export const queueAction = (action: ActionName) => {
   const queuedAction = actions[action];
-
-  if (queuedAction.audio && queuedAction.audio.readyState < 4) {
-    // Preload the audio if not already loaded
-    queuedAction.audio.load();
-  }
-
-  if (pendingQueue.length < 3) pendingQueue.push(queuedAction);
+  if (pendingQueue.length < 1) pendingQueue.push(queuedAction);
 };
