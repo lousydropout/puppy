@@ -3,8 +3,9 @@ import { animate, queueAction } from "./utils/animation";
 import { Action, ActionName, getActions } from "./utils/actions";
 import { Sound } from "./icons/Sound";
 import { Muted } from "./icons/Muted";
+import { callGoogle } from "./utils/server";
 
-export const App = () => {
+export default function Main() {
   const [muted, setMuted] = createSignal(true);
   let actions: Record<ActionName, Action> | undefined;
 
@@ -49,8 +50,10 @@ export const App = () => {
                     hover:bg-slate-400 hover:text-white
                     active:bg-slate-500 active:text-white
                     border rounded-lg px-5 py-3 block w-fit mx-auto mt-4`}
-            onClick={() => {
+            onClick={async () => {
               if (actions) queueAction(actions.happy);
+              const text = await callGoogle();
+              console.log("text: ", text);
             }}
           >
             "Good puppy!"
@@ -59,4 +62,4 @@ export const App = () => {
       </div>
     </>
   );
-};
+}
