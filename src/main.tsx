@@ -1,9 +1,17 @@
 import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
-import { Sound } from "./icons/Sound";
-import { Muted } from "./icons/Muted";
-import { Action, ActionName, getActions } from "./utils/actions";
-import { animate, queueAction } from "./utils/animation";
-import { sendAudio } from "./utils/server";
+import { Sound } from "@/icons/Sound";
+import { Muted } from "@/icons/Muted";
+import { Action, ActionName, getActions } from "@/utils/actions";
+import { animate, queueAction } from "@/utils/animation";
+import { sendAudio } from "@/utils/server";
+import { toaster } from "@kobalte/core";
+import {
+  Toast,
+  ToastContent,
+  ToastDescription,
+  ToastProgress,
+  ToastTitle,
+} from "@/components/ui/toast";
 
 const MIME_TYPE = "audio/webm" as const;
 
@@ -32,6 +40,26 @@ export default function Main() {
 
   const bgMusic = new Audio("/level-7-27947.mp3");
   bgMusic.loop = true;
+
+  const showToast = () => {
+    toaster.show((props) => (
+      <Toast
+        toastId={props.toastId}
+        duration={1_500}
+        class="bg-white bg-opacity-95"
+      >
+        <ToastContent>
+          <ToastTitle>Scooby</ToastTitle>
+          <ToastDescription>
+            <p>Gender: male</p>
+            <p>Breed: mixed (dunno mix of what though)</p>
+            <p>Date of birth: June 6th, 2016</p>
+          </ToastDescription>
+        </ToastContent>
+        <ToastProgress />
+      </Toast>
+    ));
+  };
 
   // Start recording
   const startRecording = async () => {
@@ -135,11 +163,7 @@ export default function Main() {
   }, command);
 
   return (
-    <main
-      class={recording() ? "bg-red-500 bg-opacity-60" : ""}
-      onTouchStart={startRecording}
-      onTouchEnd={stopRecording}
-    >
+    <main class={recording() ? "bg-red-500 bg-opacity-60" : ""}>
       <button
         onClick={() => setMuted((prev) => !prev)}
         class="absolute top-0 right-0 p-4 cursor-pointer"
@@ -149,7 +173,10 @@ export default function Main() {
         </Show>
       </button>
       <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
-        <h1 class="text-7xl font-semibold italic text-center">
+        <h1
+          class="text-7xl font-semibold italic text-center cursor-pointer"
+          onClick={showToast}
+        >
           Puppy
           {/* {
             <>

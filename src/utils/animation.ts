@@ -1,4 +1,4 @@
-import { audioContext, pendingQueue, type Action } from "./actions";
+import { audioContext, pendingQueue, type Action } from "@/utils/actions";
 
 const offset = 80;
 const CANVAS_WIDTH = 400;

@@ -1,4 +1,4 @@
-import "./app.css";
+import "@/app.css";
 import { clientOnly } from "@solidjs/start";
 
 const ClientOnlyComp = clientOnly(() => import("./main"));
