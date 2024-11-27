@@ -39,6 +39,7 @@ export default function Main() {
     setCommand("");
     setConfidence(0);
     try {
+      setMuted(true); // Pause background music
       audioChunks = []; // Reset the audio chunks
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder = new MediaRecorder(stream);
@@ -49,14 +50,12 @@ export default function Main() {
 
       mediaRecorder.onstop = async () => {
         try {
+          setMuted(false); // Resume background music
+
           const _blob = new Blob(audioChunks, { type: MIME_TYPE });
           setAudioBlob(_blob);
           const generatedUrl = URL.createObjectURL(_blob);
           setAudioUrl(generatedUrl);
-
-          // Play the audio locally
-          const audio = new Audio(generatedUrl);
-          audio.play();
 
           // Convert to Base64 and send
           const audioBase64 = await blobToBase64(_blob);
@@ -88,8 +87,9 @@ export default function Main() {
 
       mediaRecorder.start();
       setRecording(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error accessing microphone:", error);
+      console.error(error.message);
     }
   };
 
@@ -125,21 +125,14 @@ export default function Main() {
     bgMusic.pause();
   });
 
-  // Download the recorded audio
-  const downloadRecording = () => {
-    if (audioBlob()) {
-      const link = document.createElement("a");
-      const url = audioUrl() as string;
-      link.href = url;
-      link.download = "speech.webm";
-      link.click();
-
-      // Optional: Revoke the object URL to free up memory
-      URL.revokeObjectURL(url);
-    } else {
-      console.error("No audio to download.");
+  createEffect(() => {
+    console.log("Command: ", command());
+    if (command().split(" ").includes("good")) {
+      console.log("includes good!");
+      queueAction(actions!.happy);
+      setCommand("");
     }
-  };
+  }, command);
 
   return (
     <main
@@ -157,16 +150,17 @@ export default function Main() {
       </button>
       <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
         <h1 class="text-7xl font-semibold italic text-center">
-          Puppy -
-          {
+          Puppy
+          {/* {
             <>
+              <span> - </span>
               <span class="sm:hidden">xs</span>
               <span class="hidden sm:inline md:hidden">sm</span>
               <span class="hidden md:inline lg:hidden">md</span>
               <span class="hidden lg:inline xl:hidden">lg</span>
               <span class="hidden xl:inline">xl</span>
             </>
-          }
+          } */}
         </h1>
         <div class="flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
@@ -191,12 +185,6 @@ export default function Main() {
               </p>
             </>
           )}
-          {/* <button
-            class="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded mt-4"
-            onClick={downloadRecording}
-          >
-            Download Recorded Audio
-          </button> */}
           <button
             class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
             onClick={() => actions && queueAction(actions.happy)}
