@@ -23,6 +23,7 @@ export default function Main() {
   const [audioUrl, setAudioUrl] = createSignal<string>("");
   const [command, setCommand] = createSignal<string>("");
   const [confidence, setConfidence] = createSignal<number>(0);
+  const [error, setError] = createSignal<string>("");
 
   let actions: Record<ActionName, Action> | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
@@ -34,6 +35,9 @@ export default function Main() {
 
   // Start recording
   const startRecording = async () => {
+    setError("");
+    setCommand("");
+    setConfidence(0);
     try {
       audioChunks = []; // Reset the audio chunks
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -78,6 +82,7 @@ export default function Main() {
           setConfidence(result.results[0].alternatives[0].confidence);
         } catch (error) {
           console.error("Error processing recorded audio:", error);
+          setError("Error processing recorded audio");
         }
       };
 
@@ -137,7 +142,11 @@ export default function Main() {
   };
 
   return (
-    <>
+    <main
+      class={recording() ? "bg-red-500 bg-opacity-60" : ""}
+      onTouchStart={startRecording}
+      onTouchEnd={stopRecording}
+    >
       <button
         onClick={() => setMuted((prev) => !prev)}
         class="absolute top-0 right-0 p-4 cursor-pointer"
@@ -147,18 +156,31 @@ export default function Main() {
         </Show>
       </button>
       <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
-        <h1 class="text-7xl font-semibold italic text-center">Puppy</h1>
+        <h1 class="text-7xl font-semibold italic text-center">
+          Puppy -
+          {
+            <>
+              <span class="sm:hidden">xs</span>
+              <span class="hidden sm:inline md:hidden">sm</span>
+              <span class="hidden md:inline lg:hidden">md</span>
+              <span class="hidden lg:inline xl:hidden">lg</span>
+              <span class="hidden xl:inline">xl</span>
+            </>
+          }
+        </h1>
         <div class="flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
           <button
             class={`bg-slate-300 hover:bg-slate-400 hover:text-white
                     active:bg-slate-500 active:text-white
-                    border rounded-lg px-5 py-3 mt-4`}
+                    border rounded-lg px-5 py-3 mt-4
+                    hidden sm:block`}
             onMouseDown={startRecording}
             onMouseUp={stopRecording}
           >
             {recording() ? "Stop Recording" : "Start Recording"}
           </button>
+          {error() && <p class="text-lg mt-4 text-red-500">Error: {error()}</p>}
           {command() && (
             <>
               <p class="text-lg mt-4">
@@ -183,6 +205,6 @@ export default function Main() {
           </button>
         </div>
       </div>
-    </>
+    </main>
   );
 }
