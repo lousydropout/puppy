@@ -12,6 +12,8 @@ import {
   ToastProgress,
   ToastTitle,
 } from "@/components/ui/toast";
+import { type View } from "@/utils/constants";
+import { muted, setMuted } from "@/utils/store";
 
 const MIME_TYPE = "audio/webm" as const;
 
@@ -24,8 +26,12 @@ const blobToBase64 = (blob: Blob): Promise<string> => {
   });
 };
 
-export default function Main() {
-  const [muted, setMuted] = createSignal(true);
+type MainProps = {
+  view: View;
+  bgMusic: HTMLAudioElement;
+};
+
+export default function Main(props: MainProps) {
   const [recording, setRecording] = createSignal(false);
   const [audioBlob, setAudioBlob] = createSignal<Blob | null>(null);
   const [audioUrl, setAudioUrl] = createSignal<string>("");
@@ -33,16 +39,15 @@ export default function Main() {
   const [confidence, setConfidence] = createSignal<number>(0);
   const [error, setError] = createSignal<string>("");
 
+  const { view, bgMusic } = props;
+
   let actions: Record<ActionName, Action> | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
   let mediaRecorder: MediaRecorder | undefined;
   let audioChunks: Blob[] = [];
 
-  const bgMusic = new Audio("/level-7-27947.mp3");
-  bgMusic.loop = true;
-
   const showToast = () => {
-    toaster.show((props) => (
+    toaster.show((props: any) => (
       <Toast
         toastId={props.toastId}
         duration={1_500}
@@ -138,14 +143,6 @@ export default function Main() {
     animate(ctx, actions.normal, actions.normal);
   });
 
-  createEffect(() => {
-    if (muted()) {
-      bgMusic.pause();
-    } else {
-      bgMusic.play();
-    }
-  });
-
   onCleanup(() => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
@@ -161,6 +158,48 @@ export default function Main() {
       setCommand("");
     }
   }, command);
+
+  const ButtonCommands = () => {
+    return (
+      <>
+        <button
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => actions && queueAction(actions.happy)}
+        >
+          "Good puppy!"
+        </button>
+      </>
+    );
+  };
+
+  const VoiceCommands = () => {
+    return (
+      <>
+        <button
+          class={`bg-slate-300 hover:bg-slate-400 hover:text-white
+          active:bg-slate-500 active:text-white
+          border rounded-lg px-5 py-3 mt-4
+          hidden sm:block`}
+          onMouseDown={startRecording}
+          onMouseUp={stopRecording}
+        >
+          {recording() ? "Stop Recording" : "Start Recording"}
+        </button>
+
+        {error() && <p class="text-lg mt-4 text-red-500">Error: {error()}</p>}
+        {command() && (
+          <>
+            <p class="text-lg mt-4">
+              Command: <strong>{command()}</strong>
+            </p>
+            <p class="text-lg mt-4">
+              Confidence: <strong>{confidence()}</strong>
+            </p>
+          </>
+        )}
+      </>
+    );
+  };
 
   return (
     <main class={recording() ? "bg-red-500 bg-opacity-60" : ""}>
@@ -178,46 +217,12 @@ export default function Main() {
           onClick={showToast}
         >
           Puppy
-          {/* {
-            <>
-              <span> - </span>
-              <span class="sm:hidden">xs</span>
-              <span class="hidden sm:inline md:hidden">sm</span>
-              <span class="hidden md:inline lg:hidden">md</span>
-              <span class="hidden lg:inline xl:hidden">lg</span>
-              <span class="hidden xl:inline">xl</span>
-            </>
-          } */}
         </h1>
-        <div class="flex flex-col items-center">
+        <div class="w-full min-h-screen flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
-          <button
-            class={`bg-slate-300 hover:bg-slate-400 hover:text-white
-                    active:bg-slate-500 active:text-white
-                    border rounded-lg px-5 py-3 mt-4
-                    hidden sm:block`}
-            onMouseDown={startRecording}
-            onMouseUp={stopRecording}
-          >
-            {recording() ? "Stop Recording" : "Start Recording"}
-          </button>
-          {error() && <p class="text-lg mt-4 text-red-500">Error: {error()}</p>}
-          {command() && (
-            <>
-              <p class="text-lg mt-4">
-                Command: <strong>{command()}</strong>
-              </p>
-              <p class="text-lg mt-4">
-                Confidence: <strong>{confidence()}</strong>
-              </p>
-            </>
-          )}
-          <button
-            class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-            onClick={() => actions && queueAction(actions.happy)}
-          >
-            "Good puppy!"
-          </button>
+          <Show when={view === "chromium"} fallback={<ButtonCommands />}>
+            <VoiceCommands />
+          </Show>
         </div>
       </div>
     </main>
