@@ -1,1 +1,1 @@
-export type View = "menu" | "chromium" | "other";
+export type View = "menu" | "instructions" | "game" | "about";

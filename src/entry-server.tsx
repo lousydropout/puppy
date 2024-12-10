@@ -13,7 +13,10 @@ export default createHandler(() => (
           {assets}
         </head>
         <body>
-          <div id="app" class="w-full min-h-screen">
+          <div
+            id="app"
+            class="w-full min-h-screen flex flex-col items-center justify-around"
+          >
             {children}
           </div>
           {scripts}

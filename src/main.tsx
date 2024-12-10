@@ -10,13 +10,8 @@ import {
   ToastTitle,
 } from "@/components/ui/toast";
 
-type MainProps = {
-  bgMusic: HTMLAudioElement;
-};
-
-export default function Main(props: MainProps) {
-  const { bgMusic } = props;
-
+export default function Main() {
+  let bgMusic: HTMLAudioElement | undefined;
   let actions: Record<ActionName, Action> | undefined;
   let bg: HTMLAudioElement | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
@@ -50,9 +45,14 @@ export default function Main(props: MainProps) {
     animate(ctx, actions.normal);
   });
 
-  createEffect(() => ((bg as HTMLAudioElement).volume = 0.2));
-
-  onCleanup(() => bgMusic.pause());
+  createEffect(() => {
+    (bg as HTMLAudioElement).volume = 0.2;
+    if (typeof window !== "undefined" && !bgMusic) {
+      bgMusic = new Audio("/level-7-27947.mp3");
+      bgMusic.loop = true;
+    }
+  });
+  onCleanup(() => (bgMusic ? bgMusic.pause() : {}));
 
   const ButtonCommands = () => {
     return (
@@ -98,14 +98,14 @@ export default function Main(props: MainProps) {
       >
         <source src="/level-7-27947.mp3" type="audio/mp3" />
       </audio>
-      <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
+      <div class="flex flex-col items-center justify-start py-16 gap-16">
         <h1
           class="text-7xl font-semibold italic text-center cursor-pointer"
           onClick={showToast}
         >
           Puppy
         </h1>
-        <div class="w-full min-h-screen flex flex-col items-center">
+        <div class="w-full flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
           <ButtonCommands />
         </div>
