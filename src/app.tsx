@@ -39,7 +39,7 @@ export default function App() {
             setView("about");
           }}
         >
-          About this game
+          About
         </button>
       </nav>
     );
@@ -47,11 +47,11 @@ export default function App() {
 
   const Menu = () => {
     return (
-      <div class="flex flex-col items-center justify-start py-16 gap-8">
+      <div class="flex flex-col items-center justify-start sm:py-16 px-2 gap-8">
         <h1 class="text-7xl font-semibold italic text-center">
           Train Your Puppy!
         </h1>
-        <p class="text-3xl">A simulation puzzle game</p>
+        <p class="text-3xl italic">A simulation puzzle game</p>
         <p class="text-xl max-w-lg text-left mx-auto mt-12">
           "Train Your Puppy!" is a simulation puzzle game where the roles{" "}
           <span class="font-semibold">Human</span> and{" "}
@@ -59,8 +59,12 @@ export default function App() {
           teaching your puppy commands, your task is to discover what each
           command does.
         </p>
+        <p class="text-xl max-w-lg text-left mx-auto text-red-500">
+          Note: The sounds do not work when played on a smart phone. For best
+          experience, play on a desktop.
+        </p>
         <button
-          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl px-5 min-h-12 mt-12"
+          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl px-5 min-h-12"
           onClick={() => {
             setMuted(false);
             setView("game");
