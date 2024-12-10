@@ -4,34 +4,40 @@ import { createSignal, Match, Switch } from "solid-js";
 import { View } from "@/utils/constants";
 import { Instructions } from "@/instructions";
 import { About } from "@/about";
+import { setMuted } from "./utils/store";
 
 const ClientOnlyComp = clientOnly(() => import("./main"));
 
 export default function App() {
-  const [view, setView] = createSignal<View>("game");
+  const [view, setView] = createSignal<View>("menu");
 
   const Footer = () => {
     return (
-      <nav class="bg-blue-300 flex w-fit px-12 rounded-t-2xl gap-8 items-center justify-center fixed bottom-0">
+      <nav class="bg-blue-300 flex w-fit px-20 rounded-t-2xl gap-8 items-center justify-center fixed bottom-0">
         <button
           class="hover:underline hover:font-semibold active:underline px-5 min-h-12"
-          onClick={() => setView("instructions")}
+          onClick={() => {
+            setMuted(true);
+            setView("instructions");
+          }}
         >
           Instructions
         </button>
         <button
           class="hover:underline hover:font-semibold active:underline px-5 min-h-12"
           onClick={() => {
-            window.location.href = "http://localhost:3000";
-            // window.location.href = "https://puppy.lousydropout.com";
+            setMuted(true);
+            setView("menu");
           }}
-          disabled={view() === "game"}
         >
-          Let's play!
+          Home
         </button>
         <button
           class="hover:underline hover:font-semibold active:underline px-5 min-h-12"
-          onClick={() => setView("about")}
+          onClick={() => {
+            setMuted(true);
+            setView("about");
+          }}
         >
           About this game
         </button>
@@ -39,9 +45,36 @@ export default function App() {
     );
   };
 
+  const Menu = () => {
+    return (
+      <div class="flex flex-col items-center justify-start py-16 gap-8">
+        <h1 class="text-7xl font-semibold italic text-center">
+          Train Your Puppy!
+        </h1>
+        <p class="text-3xl">A simulation puzzle game</p>
+        <p class="text-xl max-w-lg text-left mx-auto mt-12">
+          "Train Your Puppy!" is a simulation puzzle game where the roles{" "}
+          <span class="font-semibold">Human</span> and{" "}
+          <span class="font-semibold">Puppy</span> are reversed. Instead of you
+          teaching your puppy commands, your task is to discover what each
+          command does.
+        </p>
+        <button
+          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl px-5 min-h-12 mt-12"
+          onClick={() => {
+            setMuted(false);
+            setView("game");
+          }}
+        >
+          Start playing
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
-      <Switch>
+      <Switch fallback={<Menu />}>
         <Match when={view() === "instructions"}>
           <Instructions />
         </Match>
