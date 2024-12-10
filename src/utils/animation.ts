@@ -1,4 +1,13 @@
-import { audioContext, pendingQueue, type Action } from "@/utils/actions";
+import {
+  audioContext,
+  pendingQueue,
+  type Action,
+  getActions,
+  ActionName,
+} from "@/utils/actions";
+import { muted, actions, setActions } from "@/utils/store";
+
+getActions().then((actions) => setActions(actions));
 
 const offset = 80;
 const CANVAS_WIDTH = 400;
@@ -9,11 +18,13 @@ const SPRITE_HEIGHT = 432;
 let gameFrame = 0;
 let startTime: number | null = null; // Tracks the start time of the animation
 
+let currentAudio: AudioBufferSourceNode | undefined;
+
 const playAudio = (buffer: AudioBuffer) => {
-  const source = audioContext.createBufferSource();
-  source.buffer = buffer;
-  source.connect(audioContext.destination);
-  source.start(0); // Start immediately
+  currentAudio = audioContext.createBufferSource();
+  currentAudio.buffer = buffer;
+  currentAudio.connect(audioContext.destination);
+  currentAudio.start(0); // Start immediately
 };
 
 const drawFrame = (
@@ -36,13 +47,31 @@ const drawFrame = (
   );
 };
 
+let newAnimation = true;
+
 export const animate = (
   ctx: CanvasRenderingContext2D,
   action: Action,
-  defaultAction: Action,
-  timestamp: number = performance.now()
+  timestamp: number = performance.now(),
+  iterRemaining: number | null = null
 ) => {
   const frameInterval = 1000 / action.rate; // Time (ms) per frame based on rate
+  const _iterRemaining =
+    iterRemaining && iterRemaining >= 0
+      ? iterRemaining
+      : action.imageToAudioRatio;
+
+  // Check if the audio should be initiated
+  if (
+    !muted() &&
+    action.audio &&
+    _iterRemaining === action.imageToAudioRatio &&
+    newAnimation
+  ) {
+    // if (currentAudio) (currentAudio as AudioBufferSourceNode).stop();
+    playAudio(action.audio);
+    newAnimation = false; // Prevent audio from playing again during this cycle
+  }
 
   if (startTime === null) {
     startTime = timestamp; // Initialize start time at the first frame
@@ -60,18 +89,34 @@ export const animate = (
   if (gameFrame < action.frames) {
     // Continue animation
     requestAnimationFrame((newTimestamp) =>
-      animate(ctx, action, defaultAction, newTimestamp)
+      animate(ctx, action, newTimestamp, _iterRemaining)
     );
   } else {
     // Animation complete -> reset and queue the next action
     gameFrame = 0;
     startTime = null; // Reset start time for the next animation
 
-    const nextAction: Action = pendingQueue.shift() || defaultAction;
-    if (nextAction.audio) playAudio(nextAction.audio);
-    requestAnimationFrame((newTimestamp) =>
-      animate(ctx, nextAction, defaultAction, newTimestamp)
-    );
+    let nextAction: Action | undefined;
+    if (_iterRemaining > 1) {
+      nextAction = action;
+    } else {
+      const nextInQueue = pendingQueue.shift();
+      // if the next action in the queue is not allowed from the current action,
+      // then ignore the next action in the queue and get the next action from the current action
+      nextAction = [action.name, "any"].includes(nextInQueue?.from ?? "")
+        ? nextInQueue
+        : (actions() as Record<ActionName, Action>)[action.next];
+    }
+
+    requestAnimationFrame((newTimestamp) => {
+      newAnimation = true;
+      return animate(
+        ctx,
+        nextAction as Action,
+        newTimestamp,
+        _iterRemaining - 1
+      );
+    });
   }
 };
 

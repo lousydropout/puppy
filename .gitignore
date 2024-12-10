@@ -23,6 +23,7 @@ app.config.timestamp_*.js
 
 # Temp
 gitignore
+animations
 
 # System Files
 .DS_Store

@@ -1,9 +1,6 @@
-import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
-import { Sound } from "@/icons/Sound";
-import { Muted } from "@/icons/Muted";
+import { createEffect, onCleanup, onMount } from "solid-js";
 import { Action, ActionName, getActions } from "@/utils/actions";
 import { animate, queueAction } from "@/utils/animation";
-import { sendAudio } from "@/utils/server";
 import { toaster } from "@kobalte/core";
 import {
   Toast,
@@ -12,39 +9,17 @@ import {
   ToastProgress,
   ToastTitle,
 } from "@/components/ui/toast";
-import { type View } from "@/utils/constants";
-import { muted, setMuted } from "@/utils/store";
-
-const MIME_TYPE = "audio/webm" as const;
-
-const blobToBase64 = (blob: Blob): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-};
 
 type MainProps = {
-  view: View;
   bgMusic: HTMLAudioElement;
 };
 
 export default function Main(props: MainProps) {
-  const [recording, setRecording] = createSignal(false);
-  const [audioBlob, setAudioBlob] = createSignal<Blob | null>(null);
-  const [audioUrl, setAudioUrl] = createSignal<string>("");
-  const [command, setCommand] = createSignal<string>("");
-  const [confidence, setConfidence] = createSignal<number>(0);
-  const [error, setError] = createSignal<string>("");
-
-  const { view, bgMusic } = props;
+  const { bgMusic } = props;
 
   let actions: Record<ActionName, Action> | undefined;
+  let bg: HTMLAudioElement | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
-  let mediaRecorder: MediaRecorder | undefined;
-  let audioChunks: Blob[] = [];
 
   const showToast = () => {
     toaster.show((props: any) => (
@@ -66,98 +41,18 @@ export default function Main(props: MainProps) {
     ));
   };
 
-  // Start recording
-  const startRecording = async () => {
-    setError("");
-    setCommand("");
-    setConfidence(0);
-    try {
-      setMuted(true); // Pause background music
-      audioChunks = []; // Reset the audio chunks
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunks.push(event.data);
-      };
-
-      mediaRecorder.onstop = async () => {
-        try {
-          setMuted(false); // Resume background music
-
-          const _blob = new Blob(audioChunks, { type: MIME_TYPE });
-          setAudioBlob(_blob);
-          const generatedUrl = URL.createObjectURL(_blob);
-          setAudioUrl(generatedUrl);
-
-          // Convert to Base64 and send
-          const audioBase64 = await blobToBase64(_blob);
-
-          const result = await sendAudio(audioBase64, _blob.type);
-          // result = {
-          //   "result_index": 0,
-          //   "results": [
-          //     {
-          //       "final": true,
-          //       "alternatives": [
-          //         {
-          //           "transcript": "apple for ",
-          //           "confidence": 0.4
-          //         }
-          //       ]
-          //     }
-          //   ]
-          // }
-          console.log("Recognition result: ", JSON.stringify(result, null, 2));
-
-          setCommand(result.results[0].alternatives[0].transcript);
-          setConfidence(result.results[0].alternatives[0].confidence);
-        } catch (error) {
-          console.error("Error processing recorded audio:", error);
-          setError("Error processing recorded audio");
-        }
-      };
-
-      mediaRecorder.start();
-      setRecording(true);
-    } catch (error: any) {
-      console.error("Error accessing microphone:", error);
-      console.error(error.message);
-    }
-  };
-
-  // Stop recording
-  const stopRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-      setRecording(false);
-    }
-  };
-
   onMount(async () => {
     if (!canvasRef) return;
     const ctx = canvasRef.getContext("2d");
     if (!ctx) return;
 
     actions = await getActions();
-    animate(ctx, actions.normal, actions.normal);
+    animate(ctx, actions.normal);
   });
 
-  onCleanup(() => {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-    }
-    bgMusic.pause();
-  });
+  createEffect(() => ((bg as HTMLAudioElement).volume = 0.2));
 
-  createEffect(() => {
-    console.log("Command: ", command());
-    if (command().split(" ").includes("good")) {
-      console.log("includes good!");
-      queueAction(actions!.happy);
-      setCommand("");
-    }
-  }, command);
+  onCleanup(() => bgMusic.pause());
 
   const ButtonCommands = () => {
     return (
@@ -168,49 +63,54 @@ export default function Main(props: MainProps) {
         >
           "Good puppy!"
         </button>
-      </>
-    );
-  };
-
-  const VoiceCommands = () => {
-    return (
-      <>
         <button
-          class={`bg-slate-300 hover:bg-slate-400 hover:text-white
-          active:bg-slate-500 active:text-white
-          border rounded-lg px-5 py-3 mt-4
-          hidden sm:block`}
-          onMouseDown={startRecording}
-          onMouseUp={stopRecording}
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => actions && queueAction(actions.down)}
         >
-          {recording() ? "Stop Recording" : "Start Recording"}
+          "down"
         </button>
-
-        {error() && <p class="text-lg mt-4 text-red-500">Error: {error()}</p>}
-        {command() && (
-          <>
-            <p class="text-lg mt-4">
-              Command: <strong>{command()}</strong>
-            </p>
-            <p class="text-lg mt-4">
-              Confidence: <strong>{confidence()}</strong>
-            </p>
-          </>
-        )}
+        <button
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => actions && queueAction(actions.up)}
+        >
+          "up"
+        </button>
+        <button
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => actions && queueAction(actions.rollOver)}
+        >
+          "roll over"
+        </button>
+        <button
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => actions && queueAction(actions.eager)}
+        >
+          "Who wants a treat?"
+        </button>
+        <button
+          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
+          onClick={() => {
+            actions && queueAction(actions.fetch_1);
+            console.log("Fetch treat!");
+          }}
+        >
+          (Throw treat)
+        </button>
       </>
     );
   };
 
   return (
-    <main class={recording() ? "bg-red-500 bg-opacity-60" : ""}>
-      <button
-        onClick={() => setMuted((prev) => !prev)}
-        class="absolute top-0 right-0 p-4 cursor-pointer"
+    <main>
+      <audio
+        class="absolute top-0 right-0 p-4"
+        controls
+        autoplay
+        loop
+        ref={(el) => (bg = el)}
       >
-        <Show when={muted()} fallback={<Sound />}>
-          <Muted />
-        </Show>
-      </button>
+        <source src="/level-7-27947.mp3" type="audio/mp3" />
+      </audio>
       <div class="flex flex-col items-center justify-start py-16 gap-16 min-h-screen">
         <h1
           class="text-7xl font-semibold italic text-center cursor-pointer"
@@ -220,9 +120,7 @@ export default function Main(props: MainProps) {
         </h1>
         <div class="w-full min-h-screen flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
-          <Show when={view === "chromium"} fallback={<ButtonCommands />}>
-            <VoiceCommands />
-          </Show>
+          <ButtonCommands />
         </div>
       </div>
     </main>

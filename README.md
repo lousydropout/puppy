@@ -25,7 +25,7 @@ Then, we take the following steps:
    ```
 2. convert the `png`s to `webp` while resizing and store the resulting `webp`s in `tmp/`,
    ```bash
-   mogrify -define webp:lossless=true -format webp -path tmp -resize 384x216! frame_*.png
+   mogrify -define webp:lossless=true -format webp -path tmp -resize 688x523! frame_*.png
    ```
 3. glue the `tmp/frame_*.webp` images one-by-one horizontally next to each other.
    ```bash

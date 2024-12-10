@@ -1,8 +1,8 @@
 import "@/app.css";
 import { clientOnly } from "@solidjs/start";
-import { createEffect, createSignal, onCleanup, Show } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { View } from "@/utils/constants";
-import { muted, setMuted } from "@/utils/store";
+import { setMuted } from "@/utils/store";
 
 const ClientOnlyComp = clientOnly(() => import("./main"));
 
@@ -11,37 +11,28 @@ export default function App() {
 
   let bgMusic: HTMLAudioElement | undefined;
 
-  createEffect(() => {
-    if (typeof window !== "undefined") {
-      if (!bgMusic) {
-        bgMusic = new Audio("/level-7-27947.mp3");
-        bgMusic.loop = true;
-      }
-      if (muted()) {
-        bgMusic.pause();
-      } else {
-        bgMusic.play();
-      }
-    }
-  }, [muted]);
+  // onMount(() => getActions().then((actions) => setActions(actions)));
 
-  onCleanup(() => {
-    if (bgMusic) bgMusic.pause();
+  createEffect(() => {
+    if (typeof window !== "undefined" && !bgMusic) {
+      bgMusic = new Audio("/level-7-27947.mp3");
+      bgMusic.loop = true;
+    }
   });
+  onCleanup(() => (bgMusic ? bgMusic.pause() : {}));
 
   const Menu = () => {
     return (
       <div class="w-full min-h-screen flex flex-col items-center justify-center gap-4 p-4 pt-0 -mt-12">
-        <h1 class="text-6xl mb-12 flex flex-col items-center">
-          <p>Welcome to</p>
-          <span class="italic font-semibold">Puppy!</span>
+        <h1 class="text-6xl mb-12">
+          Train your <span class="italic font-semibold">puppy!</span>
         </h1>
         <h2 class="text-2xl">Choose your mode of interaction:</h2>
         {["chromium", "other"].map((type) => (
           <button
             class="bg-slate-300 hover:bg-slate-400 hover:text-white
-           active:bg-slate-500 active:text-white
-           border rounded-lg px-5 py-3 mt-4 hidden sm:block"
+            active:bg-slate-500 active:text-white
+            border rounded-lg px-5 py-3 mt-4 hidden sm:block"
             onClick={() => {
               setMuted(false);
               setView(type as View);
@@ -71,9 +62,7 @@ export default function App() {
   return (
     <Show
       when={view() === "menu"}
-      fallback={
-        <ClientOnlyComp view={view()} bgMusic={bgMusic as HTMLAudioElement} />
-      }
+      fallback={<ClientOnlyComp bgMusic={bgMusic as HTMLAudioElement} />}
     >
       <Menu />
     </Show>
