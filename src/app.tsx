@@ -59,10 +59,6 @@ export default function App() {
           teaching your puppy commands, your task is to discover what each
           command does.
         </p>
-        <p class="text-xl max-w-lg text-left mx-auto text-red-500">
-          Note: The sounds do not work when played on a smart phone. For best
-          experience, play on a desktop.
-        </p>
         <button
           class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl px-5 min-h-12"
           onClick={() => {

@@ -48,7 +48,7 @@ export default function Main() {
   createEffect(() => {
     (bg as HTMLAudioElement).volume = 0.2;
     if (typeof window !== "undefined" && !bgMusic) {
-      bgMusic = new Audio("/level-7-27947.mp3");
+      bgMusic = new Audio("/level-7-27947.m4a");
       bgMusic.loop = true;
     }
   });
@@ -89,22 +89,10 @@ export default function Main() {
 
   return (
     <main>
-      <audio
-        class="absolute top-0 right-0 p-4"
-        controls
-        autoplay
-        loop
-        ref={(el) => (bg = el)}
-      >
-        <source src="/level-7-27947.mp3" type="audio/mp3" />
-      </audio>
       <div class="flex flex-col items-center justify-start py-16 gap-16">
-        <h1
-          class="text-7xl font-semibold italic text-center cursor-pointer"
-          onClick={showToast}
-        >
-          Puppy
-        </h1>
+        <audio class="-mt-8" controls autoplay loop ref={(el) => (bg = el)}>
+          <source src="/level-7-27947.mp3" type="audio/mp3" />
+        </audio>
         <div class="w-full flex flex-col items-center">
           <canvas width={400} height={300} ref={canvasRef}></canvas>
           <ButtonCommands />
