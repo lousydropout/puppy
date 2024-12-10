@@ -56,47 +56,34 @@ export default function Main(props: MainProps) {
 
   const ButtonCommands = () => {
     return (
-      <>
+      <div class="flex flex-col">
         <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => actions && queueAction(actions.happy)}
-        >
-          "Good puppy!"
-        </button>
-        <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => actions && queueAction(actions.down)}
-        >
-          "down"
-        </button>
-        <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => actions && queueAction(actions.up)}
-        >
-          "up"
-        </button>
-        <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => actions && queueAction(actions.rollOver)}
-        >
-          "roll over"
-        </button>
-        <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => actions && queueAction(actions.eager)}
-        >
-          "Who wants a treat?"
-        </button>
-        <button
-          class="bg-slate-300 hover:bg-slate-400 active:bg-slate-500 border rounded-lg px-5 py-3 mt-4"
-          onClick={() => {
-            actions && queueAction(actions.fetch_1);
-            console.log("Fetch treat!");
-          }}
-        >
-          (Throw treat)
-        </button>
-      </>
+          class="bg-red-500 hover:bg-red-600 active:bg-red-700 border rounded-lg px-5 py-3 mt-4 min-h-12"
+          onClick={() => actions && queueAction(actions.fetch_1)}
+        ></button>
+        <div class="flex gap-4 items-center justify-between">
+          <button
+            class="bg-blue-300 hover:bg-blue-400 active:bg-blue-500 border rounded-lg px-5 py-3 mt-4 min-h-12"
+            onClick={() => actions && queueAction(actions.happy)}
+          ></button>
+          <button
+            class="bg-green-300 hover:bg-green-400 active:bg-green-500 border rounded-lg px-5 py-3 mt-4 min-h-12"
+            onClick={() => actions && queueAction(actions.down)}
+          ></button>
+          <button
+            class="bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 border rounded-lg px-5 py-3 mt-4 min-h-12"
+            onClick={() => actions && queueAction(actions.up)}
+          ></button>
+          <button
+            class="bg-purple-300 hover:bg-purple-400 active:bg-purple-500 border rounded-lg px-5 py-3 mt-4 min-h-12"
+            onClick={() => actions && queueAction(actions.rollOver)}
+          ></button>
+          <button
+            class="bg-pink-300 hover:bg-pink-400 active:bg-pink-500 border rounded-lg px-5 py-3 mt-4 min-h-12"
+            onClick={() => actions && queueAction(actions.eager)}
+          ></button>
+        </div>
+      </div>
     );
   };
 
