@@ -47,12 +47,12 @@ export default function App() {
 
   const Menu = () => {
     return (
-      <div class="flex flex-col items-center justify-start sm:py-4 md:py-16 px-2 gap-8">
+      <div class="flex flex-col items-center justify-start gap-4 md:gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto">
         <h1 class="text-7xl font-semibold italic text-center">
           Train Your Puppy!
         </h1>
         <p class="text-3xl italic">A simulation puzzle game</p>
-        <p class="text-xl max-w-lg text-left mx-auto mt-12">
+        <p class="text-xl mt-12">
           "Train Your Puppy!" is a simulation puzzle game where the roles{" "}
           <span class="font-semibold">Human</span> and{" "}
           <span class="font-semibold">Puppy</span> are reversed. Instead of you
