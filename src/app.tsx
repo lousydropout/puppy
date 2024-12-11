@@ -4,7 +4,7 @@ import { createSignal, Match, Switch } from "solid-js";
 import { View } from "@/utils/constants";
 import { Instructions } from "@/instructions";
 import { About } from "@/about";
-import { setMuted } from "./utils/store";
+import { setMuted } from "@/utils/store";
 
 const ClientOnlyComp = clientOnly(() => import("./main"));
 
