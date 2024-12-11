@@ -1,40 +1,12 @@
 import { createEffect, onCleanup, onMount } from "solid-js";
 import { Action, ActionName, getActions } from "@/utils/actions";
 import { animate, queueAction } from "@/utils/animation";
-import { toaster } from "@kobalte/core";
-import {
-  Toast,
-  ToastContent,
-  ToastDescription,
-  ToastProgress,
-  ToastTitle,
-} from "@/components/ui/toast";
 
 export default function Main() {
   let bgMusic: HTMLAudioElement | undefined;
   let actions: Record<ActionName, Action> | undefined;
   let bg: HTMLAudioElement | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
-
-  const showToast = () => {
-    toaster.show((props: any) => (
-      <Toast
-        toastId={props.toastId}
-        duration={1_500}
-        class="bg-white bg-opacity-95"
-      >
-        <ToastContent>
-          <ToastTitle>Scooby</ToastTitle>
-          <ToastDescription>
-            <p>Gender: male</p>
-            <p>Breed: mixed (dunno mix of what though)</p>
-            <p>Date of birth: June 6th, 2016</p>
-          </ToastDescription>
-        </ToastContent>
-        <ToastProgress />
-      </Toast>
-    ));
-  };
 
   onMount(async () => {
     if (!canvasRef) return;
