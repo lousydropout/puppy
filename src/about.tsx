@@ -50,7 +50,7 @@ export const About = () => {
         <h2 class="text-2xl font-semibold">The Puppy</h2>
         <p>The "puppy" in this game is modeled after my dog, Scooby.</p>
         <p>
-          Scooby is a male dog of mixed breed (which? I dunno) born in Los
+          Scooby is a male dog of mixed breed (of what? I dunno) born in Los
           Angeles County, California on June 6th, 2016.
         </p>
         <p>
