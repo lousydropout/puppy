@@ -18,7 +18,7 @@ export const Instructions = () => {
         </p>
         <p>There are two points to keep in mind as you work on this puzzle.</p>
         <ol class="list-decimal">
-          <li>
+          <li class="mb-2">
             For a given state (e.g. sitting up, lying down), there are only a
             few commands that will induce the puppy to do anything. Most
             commands will be ignored!
@@ -42,27 +42,27 @@ export const Instructions = () => {
         />
         <p>The states (boxes) take one of the following values:</p>
         <ol class="list-decimal">
-          <li>Sitting</li>
-          <li>Lying down</li>
-          <li>Rolling over</li>
-          <li>Eager</li>
-          <li>Fetching food</li>
+          <li class="mb-1">Sitting</li>
+          <li class="mb-1">Lying down</li>
+          <li class="mb-1">Rolling over</li>
+          <li class="mb-1">Eager</li>
+          <li class="mb-1">Fetching food</li>
           <li>Excited</li>
         </ol>
         <p>The commands (arrows) take one of the following values:</p>
         <ol class="list-decimal">
-          <li class="bg-red-500">Red</li>
-          <li class="bg-green-300">Green</li>
-          <li class="bg-pink-300">Pink</li>
-          <li class="bg-blue-300">Blue</li>
-          <li class="bg-yellow-300">Yellow</li>
-          <li class="bg-purple-300">Purple</li>
-          <li>(Nothing)</li>
-          <li>(Nothing)</li>
+          <li class="mb-1 bg-red-500">Red</li>
+          <li class="mb-1 bg-green-300">Green</li>
+          <li class="mb-1 bg-pink-300">Pink</li>
+          <li class="mb-1 bg-blue-300">Blue</li>
+          <li class="mb-1 bg-yellow-300">Yellow</li>
+          <li class="mb-1 bg-purple-300">Purple</li>
+          <li class="mb-1">(Nothing)</li>
+          <li class="mb-1">(Nothing)</li>
           <li>(Nothing)</li>
         </ol>
         <p>
-          A value of "(Nothing)" means that the states transitions from one to
+          A value of "(Nothing)" means that the state transitions from one to
           the other automatically, without any command.
         </p>
       </div>
