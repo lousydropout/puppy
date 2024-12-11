@@ -51,12 +51,12 @@ export const About = () => {
         <p>The "puppy" in this game is modeled after my dog, Scooby.</p>
         <p>
           Scooby is a male dog of mixed breed (of what? I dunno) born in Los
-          Angeles County, California on June 6th, 2016.
+          Angeles County, California, on June 6th, 2016.
         </p>
         <p>
           Beyond which, Scooby is a dog who hates being told what to do...
           unless you happen to have treats. The puppy in this game is a complete
-          opposite. The puppy obeys commands.{" "}
+          opposite. This puppy is willing to follow commands.{" "}
           <i>
             (I've always wondered what it's like to have a dog who follows
             commands without having to be bribed with treats first{" "}
