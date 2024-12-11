@@ -41,8 +41,8 @@ export const About = () => {
         </p>
         <p>
           As for all of the yelpings and pantings you hear, they are from
-          recordings of Scooby (see below). Unfortuantely (for me), since Scooby
-          did not care to cooperate, I spend a ridiculous number of hours
+          recordings of Scooby (see below). Unfortuantely for me, since Scooby
+          did not care to cooperate, I had to spend a ridiculous number of hours
           following and recording him. <i>(It's a good thing he's cute.)</i>
         </p>
       </div>
