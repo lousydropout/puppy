@@ -14,8 +14,27 @@ export const Instructions = () => {
         <p>
           As you issue commands (i.e., the buttons with different colors),
           you'll notice your puppy responds differently based on its current
-          state. Your task is to uncover the rules.
+          state.
         </p>
+        <p>There are two points to keep in mind as you work on this puzzle.</p>
+        <ol class="list-decimal">
+          <li>
+            For a given state (e.g. sitting up, lying down), there are only a
+            few commands that will induce the puppy to do anything. Most
+            commands will be ignored!
+          </li>
+          <li>
+            The puppy only remembers a single command at a time and will try to
+            follow the command after finishing its current cycle of motions. Of
+            course, the command you issue might make no sense to the puppy at
+            that time and, again, (1), will be ignored.
+          </li>
+        </ol>
+        <p>
+          Your task is to uncover the rules and fill out the Finite State
+          Machine chart below (the boxes A-F and arrows 1-9).
+        </p>
+
         <img
           src="/fsm.svg"
           alt="Finite State Machine"
