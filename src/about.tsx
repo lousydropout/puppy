@@ -10,7 +10,7 @@ export const About = () => {
           Scooby, the inspiration behind the game
         </span>
       </div>
-      <div class="flex flex-col items-start justify-start gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
+      <div class="flex flex-col items-start justify-start gap-4 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
         <h2 class="text-2xl font-semibold">The music and sounds</h2>
         <p>
           The amazing 8-bit background music is titled{" "}
@@ -46,7 +46,7 @@ export const About = () => {
           following and recording him. <i>(It's a good thing he's cute.)</i>
         </p>
       </div>
-      <div class="flex flex-col items-start justify-start gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
+      <div class="flex flex-col items-start justify-start gap-4 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
         <h2 class="text-2xl font-semibold">The Puppy</h2>
         <p>The "puppy" in this game is modeled after my dog, Scooby.</p>
         <p>

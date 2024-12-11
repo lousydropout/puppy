@@ -1,11 +1,11 @@
 export const Instructions = () => {
   return (
-    <div class="flex flex-col items-center justify-start py-8 md:py-16 gap-8 md:gap-16 mb-24">
+    <div class="flex flex-col items-center justify-start py-8 md:py-16 gap-8 mb-24">
       <h1 class="text-5xl md:text-7xl font-semibold italic text-center">
         Instructions
       </h1>
 
-      <div class="flex flex-col items-start justify-start gap-4 md:gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
+      <div class="flex flex-col items-start justify-start gap-4 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto text-left">
         <p>
           "Train Your Puppy!" is a simulation puzzle game where the roles are
           reversed. Instead of teaching your puppy commands, your task is to
@@ -16,7 +16,7 @@ export const Instructions = () => {
           you'll notice your puppy responds differently based on its current
           state.
         </p>
-        <p>There are two points to keep in mind as you work on this puzzle.</p>
+        <p>There are two points to keep in mind as you work on this puzzle:</p>
         <ol class="list-decimal">
           <li class="mb-2">
             For a given state (e.g. sitting up, lying down), there are only a
