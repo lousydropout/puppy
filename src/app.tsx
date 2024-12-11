@@ -13,7 +13,7 @@ export default function App() {
 
   const Footer = () => {
     return (
-      <nav class="bg-blue-300 flex w-fit px-20 rounded-t-2xl gap-8 items-center justify-center fixed bottom-0">
+      <nav class="bg-blue-300 flex w-fit px-4 md:px-20 rounded-t-2xl gap-4 md:gap-8 items-center justify-center fixed bottom-0">
         <button
           class="hover:underline hover:font-semibold active:underline px-5 min-h-12"
           onClick={() => {
@@ -47,7 +47,7 @@ export default function App() {
 
   const Menu = () => {
     return (
-      <div class="flex flex-col items-center justify-start sm:py-16 px-2 gap-8">
+      <div class="flex flex-col items-center justify-start sm:py-4 md:py-16 px-2 gap-8">
         <h1 class="text-7xl font-semibold italic text-center">
           Train Your Puppy!
         </h1>
