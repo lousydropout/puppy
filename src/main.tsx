@@ -89,8 +89,14 @@ export default function Main() {
 
   return (
     <main>
-      <div class="flex flex-col items-center justify-start py-4 gap-4">
-        <audio controls autoplay loop ref={(el) => (bg = el)}>
+      <div class="flex flex-col items-center justify-start sm:py-4 gap-4">
+        <audio
+          class="fixed top-4"
+          controls
+          autoplay
+          loop
+          ref={(el) => (bg = el)}
+        >
           <source src="/level-7-27947.mp3" type="audio/mp3" />
         </audio>
         <div class="w-full flex flex-col items-center">

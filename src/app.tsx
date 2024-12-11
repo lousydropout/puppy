@@ -13,7 +13,7 @@ export default function App() {
 
   const Footer = () => {
     return (
-      <nav class="bg-blue-300 flex w-fit px-4 md:px-20 rounded-t-2xl gap-4 md:gap-8 items-center justify-center fixed bottom-0">
+      <nav class="bg-blue-300 flex w-fit px-4 md:px-20 rounded-t-2xl gap-4 md:gap-8 items-center justify-center fixed bottom-0 text-xs sm:text-lg">
         <button
           class="hover:underline hover:font-semibold active:underline px-5 min-h-12"
           onClick={() => {
@@ -47,12 +47,12 @@ export default function App() {
 
   const Menu = () => {
     return (
-      <div class="flex flex-col items-center justify-start gap-4 md:gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto">
-        <h1 class="text-7xl font-semibold italic text-center">
+      <div class="flex flex-col items-center justify-start gap-4 md:gap-8 w-9/12 text-md sm:text-lg md:text-xl max-w-lg mx-auto mb-20">
+        <h1 class="text-5xl sm:text-7xl font-semibold italic text-center">
           Train Your Puppy!
         </h1>
-        <p class="text-3xl italic">A simulation puzzle game</p>
-        <p class="text-xl mt-12">
+        <p class="text-xl sm:text-3xl italic">A simulation puzzle game</p>
+        <p class="text-lg sm:text-xl mt-4 sm:mt-12">
           "Train Your Puppy!" is a simulation puzzle game where the roles{" "}
           <span class="font-semibold">Human</span> and{" "}
           <span class="font-semibold">Puppy</span> are reversed. Instead of you

@@ -1,6 +1,6 @@
 export const Instructions = () => {
   return (
-    <div class="flex flex-col items-center justify-start py-8 md:py-16 gap-8 md:gap-16">
+    <div class="flex flex-col items-center justify-start py-8 md:py-16 gap-8 md:gap-16 mb-24">
       <h1 class="text-5xl md:text-7xl font-semibold italic text-center">
         Instructions
       </h1>
