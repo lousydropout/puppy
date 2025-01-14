@@ -80,6 +80,7 @@ Then, we take the following steps:
    ```bash
    mogrify -define webp:lossless=true -format webp -path tmp -resize 688x523! frame_*.png
    ```
+   and
 3. glue the `tmp/frame_*.webp` images one-by-one horizontally next to each other.
    ```bash
    montage tmp/frame_*.webp -tile x1 -geometry +0+0 sprite_sheet.webp
