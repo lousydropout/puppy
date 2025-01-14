@@ -1,31 +1,50 @@
+/**
+ * Represents the valid action names for dog animations
+ */
 export type ActionName =
-  | "normal"
-  | "down"
-  | "happy"
-  | "rollOver"
-  | "up"
-  | "eager"
-  | "fetch_1"
-  | "fetch_2";
+  | "normal" // Default standing/idle animation
+  | "down" // Dog lying down
+  | "happy" // Happy/excited animation
+  | "rollOver" // Rolling over animation
+  | "up" // Standing up from down position
+  | "eager" // Eager/anticipating animation
+  | "fetch_1" // First part of fetch animation
+  | "fetch_2"; // Second part of fetch animation
+
+/**
+ * Represents a dog animation action with associated properties
+ */
 export type Action = {
-  name: ActionName;
-  img: HTMLImageElement;
-  audio: AudioBuffer | null;
-  frames: number;
-  rate: number;
-  from: ActionName | null | "any";
-  next: ActionName;
-  imageToAudioRatio: number;
+  name: ActionName; // Name identifier for the action
+  img: HTMLImageElement; // Sprite sheet image for the animation
+  audio: AudioBuffer | null; // Associated audio for the action
+  frames: number; // Number of frames in the animation
+  rate: number; // Animation frame rate
+  from: ActionName | null | "any"; // Valid previous action state(s)
+  next: ActionName; // Next action in sequence
+  imageToAudioRatio: number; // Ratio between image and audio duration
 };
 
+/**
+ * AudioContext instance for handling audio playback
+ */
 export const audioContext = new AudioContext();
 
+/**
+ * Loads and decodes an audio file from the given URL
+ * @param url URL of the audio file to load
+ * @returns Promise resolving to decoded AudioBuffer
+ */
 const loadAudioBuffer = async (url: string): Promise<AudioBuffer> => {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   return audioContext.decodeAudioData(arrayBuffer);
 };
 
+/**
+ * Loads and initializes all dog animation actions with their associated assets
+ * @returns Promise resolving to a record of all available actions
+ */
 export const getActions = async (): Promise<Record<ActionName, Action>> => {
   const normal = new Image();
   normal.src = "/normal.webp";
@@ -140,4 +159,7 @@ export const getActions = async (): Promise<Record<ActionName, Action>> => {
   };
 };
 
+/**
+ * Queue for storing pending animation actions
+ */
 export const pendingQueue: Action[] = [];

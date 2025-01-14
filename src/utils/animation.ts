@@ -1,3 +1,4 @@
+// This module handles sprite animation and audio playback for game actions
 import {
   audioContext,
   pendingQueue,
@@ -7,8 +8,10 @@ import {
 } from "@/utils/actions";
 import { muted, actions, setActions } from "@/utils/store";
 
+// Initialize actions from store
 getActions().then((actions) => setActions(actions));
 
+// Canvas and sprite dimensions
 const offset = 80;
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 300;
@@ -18,8 +21,13 @@ const SPRITE_HEIGHT = 432;
 let gameFrame = 0;
 let startTime: number | null = null; // Tracks the start time of the animation
 
+// Audio playback state
 let currentAudio: AudioBufferSourceNode | undefined;
 
+/**
+ * Plays an audio buffer through the audio context
+ * @param buffer - The audio buffer to play
+ */
 const playAudio = (buffer: AudioBuffer) => {
   currentAudio = audioContext.createBufferSource();
   currentAudio.buffer = buffer;
@@ -27,6 +35,12 @@ const playAudio = (buffer: AudioBuffer) => {
   currentAudio.start(0); // Start immediately
 };
 
+/**
+ * Draws a single frame of the sprite animation
+ * @param ctx - The canvas rendering context
+ * @param frameX - The frame index to draw
+ * @param img - The sprite sheet image
+ */
 const drawFrame = (
   ctx: CanvasRenderingContext2D,
   frameX: number,
@@ -49,6 +63,13 @@ const drawFrame = (
 
 let newAnimation = true;
 
+/**
+ * Main animation loop that handles sprite animation and audio playback
+ * @param ctx - The canvas rendering context
+ * @param action - The current action being animated
+ * @param timestamp - Current animation timestamp
+ * @param iterRemaining - Number of iterations remaining for the current action
+ */
 export const animate = (
   ctx: CanvasRenderingContext2D,
   action: Action,
@@ -120,6 +141,10 @@ export const animate = (
   }
 };
 
+/**
+ * Adds an action to the pending queue if queue is empty
+ * @param action - The action to queue
+ */
 export const queueAction = (action: Action) => {
   if (pendingQueue.length < 1) pendingQueue.push(action);
 };
